@@ -29,17 +29,12 @@ document.addEventListener("deviceready", function() {
         if (request.status >= 200 && request.status < 400) {
             data = JSON.parse(request.response).buttonList;
             var directives;
+            var button = document.querySelector(".data");
 
             directives = {
-                name: {
-                    name: function(params) {
-                        return data.name;
-                    }
-                },
-
                 soundAddress: {
-                    dataset.href: function(params) {
-                        return data.soundAddress;
+                    button.dataset.link: function(params) {
+                        return this.soundAddress;
                     }
                 }
             };
@@ -48,10 +43,6 @@ document.addEventListener("deviceready", function() {
             // We reached our target server, but it returned an error
 
         }
-    };
-
-    request.onerror = function() {
-    // There was a connection error of some sort
     };
 
     request.send();
