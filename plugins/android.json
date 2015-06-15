@@ -24,6 +24,12 @@
                             "xml": "<feature name=\"Media\"><param name=\"android-package\" value=\"org.apache.cordova.media.AudioHandler\" /></feature>",
                             "count": 1
                         }
+                    ],
+                    "/widget": [
+                        {
+                            "xml": "<feature name=\"FileChooser\"><param name=\"android-package\" value=\"com.megster.cordova.FileChooser\" /></feature>",
+                            "count": 1
+                        }
                     ]
                 }
             },
@@ -62,6 +68,9 @@
             "PACKAGE_NAME": "com.jesse.soundboard"
         },
         "cordova-plugin-media": {
+            "PACKAGE_NAME": "com.jesse.soundboard"
+        },
+        "com.megster.cordova.FileChooser": {
             "PACKAGE_NAME": "com.jesse.soundboard"
         }
     },

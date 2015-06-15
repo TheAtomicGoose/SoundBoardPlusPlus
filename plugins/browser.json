@@ -32,6 +32,9 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.jesse.soundboard"
+        },
+        "com.megster.cordova.FileChooser": {
+            "PACKAGE_NAME": "com.jesse.soundboard"
         }
     },
     "dependent_plugins": {}

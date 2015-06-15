@@ -36,7 +36,16 @@
             "type": "registry",
             "id": "cordova-plugin-file"
         },
-        "is_top_level": false,
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.megster.cordova.FileChooser": {
+        "source": {
+            "type": "git",
+            "url": "http://github.com/don/cordova-filechooser.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
         "variables": {}
     }
 }

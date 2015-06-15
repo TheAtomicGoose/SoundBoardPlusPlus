@@ -27,6 +27,13 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/com.megster.cordova.FileChooser/www/fileChooser.js",
+        "id": "com.megster.cordova.FileChooser.FileChooser",
+        "clobbers": [
+            "fileChooser"
+        ]
+    },
+    {
         "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
         "id": "cordova-plugin-file.DirectoryEntry",
         "clobbers": [
@@ -180,6 +187,7 @@ module.exports.metadata =
     "cordova-plugin-device": "1.0.0",
     "cordova-plugin-console": "1.0.0",
     "cordova-plugin-media": "1.0.0",
+    "com.megster.cordova.FileChooser": "0.0.0",
     "cordova-plugin-file": "2.0.0"
 }
 // BOTTOM OF METADATA

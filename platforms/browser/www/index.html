@@ -31,15 +31,16 @@ under the License.
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <script type="text/javascript" src="js/buttons.json"></script>
         <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
         <script type="text/javascript" src="js/transparency.min.js"></script>
-        <title>Hello World</title>
+        <title>SoundBoard</title>
     </head>
     <body>
         <div class="buttons">
-            <button type="button" data-link="soundAddress" class="name data"></button>
+            <button type="button" class="button"><a class="index"><span class="name"></span></a></button>
         </div>
+        <button type="button" id="stop">Stop All Sounds</button>
+        <button type="button" id="new"><a href="newSound.html">New Sound</a></button>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
