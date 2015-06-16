@@ -37,7 +37,7 @@ $(document).ready(function() {
             success: function(data) {
                 template = data;
            }
-        })
+        });
 
         var realRoot = cordova.file.externalRootDirectory;
 
@@ -81,6 +81,10 @@ $(document).ready(function() {
                     writer.write(template);
                 }
 
+                // This is defined here so that the stop button function doesn't have to
+                // also be inside of the getJSON call
+                var media; 
+
                 // If the JSON file is successfully retrieved, set jsonData to the buttonList array in
                 // the JSON file
                 $.getJSON(fileEntry.nativeURL, function(data) {
@@ -99,29 +103,27 @@ $(document).ready(function() {
 
                     // Fills in the HTML using transparency.js
                     $(".buttons").render(jsonData, directives);
+
+
+                    // When a button with class "button" is clicked
+                    $(".button").on("touchend", function() {
+
+                        // Find the span with the index number
+                        indexSpan = $(this).find("a span").not(".name");
+
+                        // Turn the soundAddress attribute into an actual filesystem URL
+                        window.resolveLocalFileSystemURL(jsonData[indexSpan.data("index")].soundAddress, gotSoundAddress, fail);
+
+                        // Creates and plays sound on success
+                        function gotSoundAddress(file) {
+                            console.log(file.fullPath);
+                            media = new Media(file.fullPath);
+                            media.play();
+                        }
+
+                    });
                 });
                 
-                var media;
-
-                // When a button with class "button" is clicked
-                $(".button").on("touchstart", function() {
-
-                    console.log(this);
-                    // // Find the span with the index number
-                    // indexSpan = $(this).find("a span").not(".name");
-
-                    // // Turn the soundAddress attribute into an actual filesystem URL
-                    // window.resolveLocalFileSystemURL(jsonData[indexSpan.data("index")].soundAddress, gotSoundAddress, fail);
-
-                    // // Creates and plays sound on success
-                    // function gotSoundAddress(file) {
-                    //     console.log(file.fullPath);
-                    //     media = new Media(file.fullPath);
-                    //     media.play();
-                    // }
-
-                });
-
                 // If the Stop All Sounds button is touched, stop playback
                 $("#stop").on("touchend", function() {
                     media.stop();
@@ -155,7 +157,7 @@ $(document).ready(function() {
                     }
 
                     function gotNewWriter(writer) {
-                        if (soundName.length < 1 || selectedFile == null) {
+                        if (soundName.length < 1 || selectedFile === null) {
                             alert("Please make sure all fields are filled in.");
                         } else {
                             writer.seek(writer.length - 2);
