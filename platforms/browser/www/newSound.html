@@ -12,13 +12,17 @@
         <title>New Sound</title>
     </head>
     <body>
-        <form>
-            Name of Sound: <br>
-            <input type="text" name="soundname" id="soundName"><br>
-            Sound Location: <br>
-            <input type="button" name="file" id="location"><br><br>
-            <input type="button" value="Submit" id="createNew">
-        </form>
+    <br>
+    <br>
+    <div id="newForm">
+            <form>
+                <span class="fieldDescr"><strong>Name of Sound: </strong></span><br>
+                <input type="text" name="soundname" id="soundName"><br><br>
+                <span class="fieldDescr"><strong>Sound Location: </strong></span><br>
+                <input type="button" name="file" id="location" class="nephritis-flat-button" value="Browse"><br><br>
+                <input type="button" value="Submit" id="submitNew" class="nephritis-flat-button">
+            </form>
+        </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>

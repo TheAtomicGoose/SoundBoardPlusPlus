@@ -64,9 +64,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.jesse.soundboard"
         },
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.jesse.soundboard"
-        },
         "cordova-plugin-media": {
             "PACKAGE_NAME": "com.jesse.soundboard"
         },

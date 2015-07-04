@@ -185,7 +185,6 @@ module.exports.metadata =
 {
     "cordova-plugin-whitelist": "1.0.0",
     "cordova-plugin-device": "1.0.0",
-    "cordova-plugin-console": "1.0.0",
     "cordova-plugin-media": "1.0.0",
     "com.megster.cordova.FileChooser": "0.0.0",
     "cordova-plugin-file": "2.0.0"

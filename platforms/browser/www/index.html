@@ -17,15 +17,6 @@ under the License.
 -->
 <html>
     <head>
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-        https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-        * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-        * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-        * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-        * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
         <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
@@ -37,10 +28,10 @@ under the License.
     </head>
     <body>
         <div class="buttons">
-            <button type="button" class="button"><a class="index"><span class="name"></span></a></button>
+            <button type="button" class="button peter-river-flat-button"><a class="index"><span class="name"></span></a></button>
         </div>
-        <button type="button" id="stop">Stop All Sounds</button>
-        <button type="button" id="new"><a href="newSound.html">New Sound</a></button>
+        <button type="button" id="stop" class="nephritis-flat-button">Stop All Sounds</button>
+        <button type="button" id="createNew" class="nephritis-flat-button"><a href="./newSound.html">New Sound</a></button>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>

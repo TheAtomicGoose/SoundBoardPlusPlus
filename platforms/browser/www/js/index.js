@@ -21,6 +21,7 @@ var jsonData;  // Global for testing purposes
 var selectedFile;
 
 $(document).ready(function() {
+    
 
     // Makes sure everything happens after the device is ready
     // Otherwise it may not work due to asynchronization
@@ -37,33 +38,29 @@ $(document).ready(function() {
             success: function(data) {
                 template = data;
            }
-        })
+        });
 
         var realRoot = cordova.file.externalRootDirectory;
 
         // Passes the root of the external storage (e.g. the SD card), as a DirectoryEntry
         window.resolveLocalFileSystemURL(realRoot, gotRootDirectory, fail);
 
-        // Creates the directory "/storage/emulated/0/SoundBoardPlusPlus"
+        // Creates the directory "file:///storage/emulated/0/SoundBoardPlusPlus"
         function gotRootDirectory(directoryEntry) {
             directoryEntry.getDirectory("SoundBoardPlusPlus", {create: true, exclusive: false}, gotAppDirectory, fail);
         }
 
-        // Creates the directory "/storage/emulated/0/SoundBoardPlusPlus/sounds"
-        // Also creates the file "/storage/emulated/0/SoundBoardPlusPlus/buttons.json". This is the file that will be read
+        // Creates the directory "file:///storage/emulated/0/SoundBoardPlusPlus/sounds"
+        // Also creates the file "file:///storage/emulated/0/SoundBoardPlusPlus/buttons.json". This is the file that will be read
         // from each time the app loads index.html to create the buttons
         function gotAppDirectory(parent) {
             parent.getDirectory("sounds", {create: true, exclusive: false}, gotSoundsDirectory, fail);
             parent.getFile("buttons.json", {create: true, exclusive: false}, gotButtonsFile, fail);
         }
 
-        function gotSoundsDirectory(parent) {
-            console.log("sounds directory success");
-        }
+        function gotSoundsDirectory(parent) { }
 
         function gotButtonsFile(file) {
-            console.log("buttons file success");
-
             // Get the JSON file
             window.resolveLocalFileSystemURL(realRoot + "SoundBoardPlusPlus/buttons.json", gotJSONSuccess, fail);
         }
@@ -83,8 +80,11 @@ $(document).ready(function() {
             function gotButtonsWriter(writer) {
                 if (writer.length < 1) {
                     writer.write(template);
-                    console.log("template written");
                 }
+
+                // This is defined here so that the stop button function doesn't have to
+                // also be inside of the getJSON call
+                var media; 
 
                 // If the JSON file is successfully retrieved, set jsonData to the buttonList array in
                 // the JSON file
@@ -104,67 +104,69 @@ $(document).ready(function() {
 
                     // Fills in the HTML using transparency.js
                     $(".buttons").render(jsonData, directives);
+
+
+                    // When a button with class "button" is clicked
+                    $(".button").on("touchend", function() {
+
+                        // Find the span with the index number
+                        indexSpan = $(this).find("a span").not(".name");
+
+                        // Turn the soundAddress attribute into an actual filesystem URL
+                        window.resolveLocalFileSystemURL(jsonData[indexSpan.data("index")].soundAddress, gotSoundAddress, fail);
+
+                        // Creates and plays sound on success
+                        function gotSoundAddress(file) {
+                            console.log(file.fullPath);
+                            media = new Media(file.fullPath);
+                            media.play();
+                        }
+
+                    });
                 });
                 
-                var media;
-
-                // When a button with class "button" is clicked
-                $(".button").on("click", function() {
-                    console.log("test");
-                    // // Find the span with the index number
-                    // indexSpan = $(document.activeElement).find("span").not(".name");
-                    // // Create a new Media object
-                    // media = new Media(jsonData[indexSpan.data("index")].soundAddress);
-                    // media.play();  // Play said Media object
-                });
-
-                // If the Stop All Sounds button is clicked, stop playback
-                $("#stop").on("click", function() {
+                // If the Stop All Sounds button is touched, stop playback
+                $("#stop").on("touchend", function() {
                     media.stop();
                 });
 
-                // When the New Sound button is clicked:
-                $("#createNew").on("click", function() {
+                // When the Submit button in newSound.html is pressed:
+                $("#submitNew").on("touchend", function() {
+
                     // Get the name and path of the new sound
                     var soundName = document.getElementById("soundName").value;
-                    console.log(selectedFile);
 
+                    // Resolve the selected file's URL
                     window.resolveLocalFileSystemURL(selectedFile, gotMediaFile, fail);
 
                     var copyFile;
 
+                    // On successful resolve:
                     function gotMediaFile(file) {
                         copyFile = file;
-                        fileEntry.getParent(gotParent, fail);
+                        fileEntry.getParent(gotParent, fail);  // Gets the parent folder of the JSON file
                     }
 
                     function gotParent(parent) {
-                        parent.getDirectory("sounds", {create: false, exclusive: false}, gotSoundsDir, fail);
-                        console.log(parent);
+                        parent.getDirectory("sounds", {create: false, exclusive: false}, gotSoundsDir, fail);  // Finds /SoundboardPlusPlus/sounds
                     }
 
                     function gotSoundsDir(soundsDir) {
-                        copyFile.copyTo(soundsDir, soundName, gotCopyFile, fail);
+                        copyFile.copyTo(soundsDir, soundName, gotCopyFile, fail);  // Copies the selected music file to /SoundboardPlusPlus/sounds
                     }
 
                     function gotCopyFile(entry) {
-                        fileEntry.createWriter(gotNewWriter, fail);
+                        fileEntry.createWriter(gotNewWriter, fail);  // Creates a writer for the JSON file
                     }
 
                     function gotNewWriter(writer) {
-                        if (soundName.length < 1 || selectedFile == null) {
-                            alert("Please make sure all fields are filled in.");
-                        } else {
-                            writer.seek(writer.length - 6);
-                            writer.write(",\n\n\t\t{\n\t\t\t\"index\": " + jsonData.length + ",\n\"name\": \"" + soundName + "\",\n\"soundAddress\": \"" + "SoundBoardPlusPlus/sounds/" + soundName + "\"\n}\n]\n}")
-                            console.log("entry");
-                        }
+                        writer.seek(writer.length - 2);
+                        writer.write(",{\"index\":" + jsonData.length + ",\"name\":\"" + soundName + "\",\"soundAddress\":\"" + realRoot + "SoundBoardPlusPlus/sounds/" + soundName + "\"}]}");
                     }
 
                     location.href = "./index.html";
                 });
             }
-
             
         }
     });
@@ -174,8 +176,4 @@ $("#location").on("click", function fileSelector() {
     fileChooser.open(function(uri) {
         selectedFile = uri;
     });
-});
-
-$(document).bind("touchend", function(e) {
-    $(e.target).trigger("click");
 });

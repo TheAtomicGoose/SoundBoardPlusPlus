@@ -21,6 +21,7 @@ var jsonData;  // Global for testing purposes
 var selectedFile;
 
 $(document).ready(function() {
+    
 
     // Makes sure everything happens after the device is ready
     // Otherwise it may not work due to asynchronization
@@ -129,43 +130,41 @@ $(document).ready(function() {
                     media.stop();
                 });
 
-                // When the New Sound button is clicked:
-                $("#createNew").on("touchend", function() {
+                // When the Submit button in newSound.html is pressed:
+                $("#submitNew").on("touchend", function() {
 
                     // Get the name and path of the new sound
                     var soundName = document.getElementById("soundName").value;
 
+                    // Resolve the selected file's URL
                     window.resolveLocalFileSystemURL(selectedFile, gotMediaFile, fail);
 
                     var copyFile;
 
+                    // On successful resolve:
                     function gotMediaFile(file) {
                         copyFile = file;
-                        fileEntry.getParent(gotParent, fail);
+                        fileEntry.getParent(gotParent, fail);  // Gets the parent folder of the JSON file
                     }
 
                     function gotParent(parent) {
-                        parent.getDirectory("sounds", {create: false, exclusive: false}, gotSoundsDir, fail);
+                        parent.getDirectory("sounds", {create: false, exclusive: false}, gotSoundsDir, fail);  // Finds /SoundboardPlusPlus/sounds
                     }
 
                     function gotSoundsDir(soundsDir) {
-                        copyFile.copyTo(soundsDir, soundName, gotCopyFile, fail);
+                        copyFile.copyTo(soundsDir, soundName, gotCopyFile, fail);  // Copies the selected music file to /SoundboardPlusPlus/sounds
                     }
 
                     function gotCopyFile(entry) {
-                        fileEntry.createWriter(gotNewWriter, fail);
+                        fileEntry.createWriter(gotNewWriter, fail);  // Creates a writer for the JSON file
                     }
 
                     function gotNewWriter(writer) {
-                        if (soundName.length < 1 || selectedFile === null) {
-                            alert("Please make sure all fields are filled in.");
-                        } else {
-                            writer.seek(writer.length - 2);
-                            writer.write(",{\"index\":" + jsonData.length + ",\"name\":\"" + soundName + "\",\"soundAddress\":\"" + realRoot + "SoundBoardPlusPlus/sounds/" + soundName + "\"}]}");
-                        }
+                        writer.seek(writer.length - 2);
+                        writer.write(",{\"index\":" + jsonData.length + ",\"name\":\"" + soundName + "\",\"soundAddress\":\"" + realRoot + "SoundBoardPlusPlus/sounds/" + soundName + "\"}]}");
                     }
 
-                    // location.href = "./index.html";
+                    location.href = "./index.html";
                 });
             }
             
