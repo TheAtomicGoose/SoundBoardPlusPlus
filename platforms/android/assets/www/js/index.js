@@ -19,6 +19,7 @@
 
 var jsonData;  // Global for testing purposes
 var selectedFile;
+var media = null; 
 
 $(document).ready(function() {
     
@@ -84,7 +85,6 @@ $(document).ready(function() {
 
                 // This is defined here so that the stop button function doesn't have to
                 // also be inside of the getJSON call
-                var media; 
 
                 // If the JSON file is successfully retrieved, set jsonData to the buttonList array in
                 // the JSON file
@@ -109,25 +109,36 @@ $(document).ready(function() {
                     // When a button with class "button" is clicked
                     $(".button").on("touchend", function() {
 
-                        // Find the span with the index number
-                        indexSpan = $(this).find("a span").not(".name");
+                        // If no sound is playing currently:
+                        if (media === null || media.mediaStatus() === 0 || media.mediaStatus === 4) {
 
-                        // Turn the soundAddress attribute into an actual filesystem URL
-                        window.resolveLocalFileSystemURL(jsonData[indexSpan.data("index")].soundAddress, gotSoundAddress, fail);
+                            // Find the span with the index number
+                            indexSpan = $(this).find("a span").not(".name");
 
-                        // Creates and plays sound on success
-                        function gotSoundAddress(file) {
-                            console.log(file.fullPath);
-                            media = new Media(file.fullPath);
-                            media.play();
+                            // Turn the soundAddress attribute into an actual filesystem URL
+                            window.resolveLocalFileSystemURL(jsonData[indexSpan.data("index")].soundAddress, gotSoundAddress, fail);
+
+                            // Creates and plays sound on success
+                            function gotSoundAddress(file) {
+                                console.log(file.fullPath);
+                                media = new Media(file.fullPath, mediaSuccess, fail, mediaStatus);
+                                media.play();
+                            }
+
+                            function mediaSuccess() { }
+
+                            function mediaStatus(status) {
+                                console.log(status);
+                                return status;
+                            }
                         }
-
                     });
                 });
                 
                 // If the Stop All Sounds button is touched, stop playback
                 $("#stop").on("touchend", function() {
                     media.stop();
+                    media = null;
                 });
 
                 // When the Submit button in newSound.html is pressed:
