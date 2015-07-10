@@ -19,7 +19,9 @@
 
 var jsonData;  // Global for testing purposes
 var selectedFile;
-var media = null; 
+
+// Hides the "Sound already playing" tooltip
+$("#playing").hide();
 
 $(document).ready(function() {
     
@@ -85,6 +87,7 @@ $(document).ready(function() {
 
                 // This is defined here so that the stop button function doesn't have to
                 // also be inside of the getJSON call
+                var media = null; 
 
                 // If the JSON file is successfully retrieved, set jsonData to the buttonList array in
                 // the JSON file
@@ -110,7 +113,7 @@ $(document).ready(function() {
                     $(".button").on("touchend", function() {
 
                         // If no sound is playing currently:
-                        if (media === null || media.mediaStatus() === 0 || media.mediaStatus === 4) {
+                        if (media === null) {
 
                             // Find the span with the index number
                             indexSpan = $(this).find("a span").not(".name");
@@ -120,17 +123,14 @@ $(document).ready(function() {
 
                             // Creates and plays sound on success
                             function gotSoundAddress(file) {
-                                console.log(file.fullPath);
-                                media = new Media(file.fullPath, mediaSuccess, fail, mediaStatus);
+                                media = new Media(file.fullPath);
                                 media.play();
                             }
 
-                            function mediaSuccess() { }
+                        } else {
 
-                            function mediaStatus(status) {
-                                console.log(status);
-                                return status;
-                            }
+                            $("#playing").fadeIn("slow");
+                            setTimeout(function() { $("#playing").fadeOut("slow"); }, 2000);
                         }
                     });
                 });

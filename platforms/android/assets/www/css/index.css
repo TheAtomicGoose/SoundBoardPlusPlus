@@ -165,3 +165,26 @@ h1 {
   -webkit-box-shadow: inset 0 -2px #219d55;
   box-shadow: inset 0 -2px #219d55;
 }
+
+button {
+    /* Prevents outline around button after tap */
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    -webkit-tap-highlight-color: transparent;
+}
+
+#playing {
+    -webkit-box-shadow: 0px 2px 24px 5px rgba(61,59,61,1);
+    -moz-box-shadow: 0px 2px 24px 5px rgba(61,59,61,1);
+    box-shadow: 0px 2px 24px 5px rgba(61,59,61,1);
+    text-align: center;
+    margin: 70% 20% 0 20%;
+    background-image: 
+        radial-gradient(
+            #808080,
+            #333333
+        );
+    font-size: 16px;
+    color: white;
+    border-radius: 3px;
+    padding: 25px;
+}
